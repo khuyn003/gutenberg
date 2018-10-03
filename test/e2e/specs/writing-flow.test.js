@@ -160,4 +160,49 @@ describe( 'adding blocks', () => {
 		await page.keyboard.type( 'Inside' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
+
+	it( 'should insert line break at end', async () => {
+		// Ensure no zero-width space character. Notably, this can occur when
+		// save occurs while at an inline boundary edge.
+		await clickBlockAppender();
+		await page.keyboard.type( 'a' );
+		await page.keyboard.down( 'Shift' );
+		await page.keyboard.press( 'Enter' );
+		await page.keyboard.up( 'Shift' );
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
+
+	it( 'should insert line break mid text', async () => {
+		// Ensure no zero-width space character. Notably, this can occur when
+		// save occurs while at an inline boundary edge.
+		await clickBlockAppender();
+		await page.keyboard.type( 'ab' );
+		await page.keyboard.press( 'ArrowLeft' );
+		await page.keyboard.down( 'Shift' );
+		await page.keyboard.press( 'Enter' );
+		await page.keyboard.up( 'Shift' );
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
+
+	it( 'should insert line break at start', async () => {
+		// Ensure no zero-width space character. Notably, this can occur when
+		// save occurs while at an inline boundary edge.
+		await clickBlockAppender();
+		await page.keyboard.type( 'a' );
+		await page.keyboard.press( 'ArrowLeft' );
+		await page.keyboard.down( 'Shift' );
+		await page.keyboard.press( 'Enter' );
+		await page.keyboard.up( 'Shift' );
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
+
+	it( 'should insert line break in empty container', async () => {
+		// Ensure no zero-width space character. Notably, this can occur when
+		// save occurs while at an inline boundary edge.
+		await clickBlockAppender();
+		await page.keyboard.down( 'Shift' );
+		await page.keyboard.press( 'Enter' );
+		await page.keyboard.up( 'Shift' );
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
 } );
